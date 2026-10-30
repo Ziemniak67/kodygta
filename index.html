@@ -1,66 +1,518 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Czat Klasowy PRO</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTA V — Kompletna Baza Kodów</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --color-canvas-default: #0d1117;
+      --color-canvas-subtle: #161b22;
+      --color-border-default: #30363d;
+      --color-border-muted: #21262d;
+      --color-text-primary: #e6edf3;
+      --color-text-secondary: #8b949e;
+      --color-text-link: #2f81f7;
+      --color-accent-emphasis: #238636;
+      --color-btn-bg: #21262d;
+      --color-btn-hover-bg: #30363d;
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--color-canvas-default);
+      color: var(--color-text-primary);
+      font-family: var(--font-stack);
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 10px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1012px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      body { padding: 24px 16px; }
+    }
+
+    /* Pasek narzędzi i filtry */
+    .gh-toolbar {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .gh-toolbar { 
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+      }
+    }
+
+    .toolbar-full {
+      grid-column: span 3;
+      display: flex;
+      gap: 8px;
+    }
+
+    .gh-input, .gh-select {
+      background-color: var(--color-canvas-default);
+      border: 1px solid var(--color-border-default);
+      border-radius: 6px;
+      color: var(--color-text-primary);
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: var(--font-stack);
+      outline: none;
+      width: 100%;
+    }
+
+    .gh-input:focus, .gh-select:focus {
+      border-color: var(--color-text-link);
+      box-shadow: 0 0 0 3px rgba(47,129,247,0.3);
+    }
+
+    .gh-select { cursor: pointer; }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+      width: 100%;
+    }
+
+    @media (min-width: 640px) {
+      .action-buttons { width: auto; }
+    }
+
+    .gh-btn {
+      background-color: var(--color-btn-bg);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border-default);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex: 1;
+      transition: 0.2s;
+    }
+
+    @media (min-width: 640px) {
+      .gh-btn { flex: initial; padding: 6px 12px; font-size: 12px; }
+    }
+
+    .gh-btn:hover { background-color: var(--color-btn-hover-bg); border-color: #8b949e; }
+    .gh-btn-primary { background-color: var(--color-accent-emphasis); color: #ffffff; border-color: rgba(240,246,252,0.1); }
+    .gh-btn-primary:hover { background-color: #2ea043; }
+
+    .gh-file-box {
+      border: 1px solid var(--color-border-default);
+      border-radius: 6px;
+      background-color: var(--color-canvas-subtle);
+      overflow: hidden;
+    }
+
+    .gh-file-header {
+      background-color: var(--color-border-muted);
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border-default);
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+
+    /* Tabela desktopowa */
+    .desktop-table-wrapper {
+      display: none;
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    @media (min-width: 768px) {
+      .desktop-table-wrapper { display: block; }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      font-weight: 600;
+      background-color: rgba(110, 118, 129, 0.05);
+      color: var(--color-text-primary);
+      border-bottom: 1px solid var(--color-border-default);
+      padding: 10px 16px;
+    }
+
+    td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--color-border-muted);
+    }
+
+    .category-row td {
+      background-color: rgba(56, 139, 253, 0.08) !important;
+      font-weight: 600;
+      color: #79c0ff;
+      border-top: 1px solid var(--color-border-default);
+      border-bottom: 1px solid var(--color-border-default);
+      font-size: 12px;
+      letter-spacing: 0.03em;
+    }
+
+    /* Kafelki mobilne */
+    .mobile-cards-wrapper {
+      display: flex;
+      flex-direction: column;
+      padding: 8px;
+      gap: 8px;
+    }
+
+    @media (min-width: 768px) {
+      .mobile-cards-wrapper { display: none; }
+    }
+
+    .mobile-category-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: #79c0ff;
+      background: rgba(56, 139, 253, 0.1);
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-top: 8px;
+      border: 1px solid rgba(56, 139, 253, 0.2);
+    }
+
+    .mobile-card {
+      background-color: var(--color-canvas-default);
+      border: 1px solid var(--color-border-default);
+      border-radius: 6px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mobile-card-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--color-text-primary);
+      border-bottom: 1px solid var(--color-border-muted);
+      padding-bottom: 6px;
+    }
+
+    .mobile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .mobile-field-label {
+      font-size: 10px;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+      margin-bottom: 2px;
+    }
+
+    .mobile-full-width { grid-column: span 2; }
+
+    code {
+      font-family: var(--font-mono);
+      padding: 0.2em 0.4em;
+      border-radius: 6px;
+      background-color: rgba(240, 246, 252, 0.1);
+      font-size: 12px;
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+    }
+
+    .code-pc { color: #ffa657; }
+    .code-phone { color: #7ee787; }
+    .pad-combo {
+      color: var(--color-text-secondary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: rgba(110, 118, 129, 0.05);
+      padding: 4px;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .repo-footer {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    @media (min-width: 640px) { .repo-footer { text-align: right; } }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background-color: #0d1117 !important; padding: 0 !important; }
+      .gh-file-box { border: none !important; }
+      .desktop-table-wrapper { display: block !important; }
+      .mobile-cards-wrapper { display: none !important; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- EKRAN LOGOWANIA -->
-    <div id="auth-screen" class="auth-wrapper">
-        <div class="auth-card">
-            <h2>Witaj w klasie 🌿</h2>
-            <input type="text" id="username" placeholder="Login">
-            <input type="password" id="password" placeholder="Hasło">
-            <button onclick="handleAuth()">Zaloguj / Stwórz konto</button>
-            <p style="font-size: 11px; margin-top: 10px; color: #666;">Admin: admin / admln</p>
+  <div class="container">
+    
+    <!-- Pasek narzędzi z nowymi filtrami platform -->
+    <div class="gh-toolbar no-print">
+      <input type="text" id="searchInput" class="gh-input" onkeyup="filterCheats()" placeholder="Szukaj kodu lub efektu...">
+      
+      <select id="categoryFilter" class="gh-select" onchange="filterCheats()">
+        <option value="all">Wszystkie kategorie gry</option>
+        <option value="gracz">01. Gracz i Statystyki</option>
+        <option value="swiat">02. Świat i Otoczenie</option>
+        <option value="bronie">03. Walka i Ekwipunek</option>
+        <option value="pojazdy-lad">04. Pojazdy Lądowe</option>
+        <option value="pojazdy-lot">05. Pojazdy Latające</option>
+        <option value="pojazdy-spec">06. Pojazdy Specjalne</option>
+      </select>
+
+      <select id="platformFilter" class="gh-select" onchange="filterCheats()">
+        <option value="all">Wszystkie platformy</option>
+        <option value="pc">💻 PC (Konsola ~)</option>
+        <option value="telefon">📱 W telefonie (Numer)</option>
+        <option value="ps">🎮 PlayStation (PS3/PS4/PS5)</option>
+        <option value="xbox">🎮 Xbox (360/One/Series)</option>
+      </select>
+
+      <div class="toolbar-full">
+        <div class="action-buttons">
+          <button class="gh-btn" onclick="window.print()">🖨️ Drukuj / PDF</button>
+          <button class="gh-btn gh-btn-primary" onclick="exportPNG()">📥 Pobierz PNG</button>
         </div>
+      </div>
     </div>
 
-    <!-- EKRAN GŁÓWNY -->
-    <div id="app-screen" class="hidden">
-        <aside id="side-menu">
-            <div class="profile-section">
-                <label class="avatar-label">
-                    <img id="user-avatar" src="https://ui-avatars.com" alt="Avatar">
-                    <input type="file" id="upload-avatar" hidden accept="image/*" onchange="changeAvatar(this)">
-                </label>
-                <div class="user-meta">
-                    <span id="user-display"></span>
-                    <div id="admin-tag" class="hidden">GŁÓWNY ADMIN</div>
-                </div>
+    <!-- Główny kontener -->
+    <div class="gh-file-box" id="exportArea">
+      <div class="gh-file-header no-print">
+        <div style="font-family: var(--font-mono);">gta5-master-database.json</div>
+        <div style="font-family: var(--font-mono);" id="cheatCount">ładowanie...</div>
+      </div>
+
+      <!-- Tabela desktopowa -->
+      <div class="desktop-table-wrapper">
+        <table id="desktopTable">
+          <thead>
+            <tr>
+              <th style="width: 28%;">Efekt / Nazwa</th>
+              <th style="width: 18%;">PC (Konsola ~)</th>
+              <th style="width: 20%;">W telefonie (Numer)</th>
+              <th style="width: 17%;">PlayStation</th>
+              <th style="width: 17%;">Xbox</th>
+            </tr>
+          </thead>
+          <tbody id="desktopTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Kafelki mobilne -->
+      <div class="mobile-cards-wrapper" id="mobileCardsContainer"></div>
+    </div>
+
+    <div class="repo-footer">
+      <span>GTA V Master Database • Platform Filter Edition</span>
+    </div>
+
+  </div>
+
+  <script>
+    const cheatsData = [
+      { category: "gracz", title: "Nieśmiertelność (5 min)", pc: "PAINKILLER", phone: "1-999-7246-545537", ps: "→, X, →, ←, →, R1, →, ←, X, ▲", xbox: "→, A, →, ←, →, RB, →, ←, A, Y" },
+      { category: "gracz", title: "Maksymalne Zdrowie i Pancerz", pc: "TURTLE", phone: "1-999-887-853", ps: "●, L1, ▲, R2, X, ■, ●, →, ■, L1, L1, L1", xbox: "B, LB, Y, RT, A, X, B, →, X, LB, LB, LB" },
+      { category: "gracz", title: "Odnowienie Zdolności Specjalnej", pc: "POWERUP", phone: "1-999-769-3787", ps: "X, X, ■, R1, L1, X, →, ←, X", xbox: "A, A, X, RB, LB, A, →, ←, A" },
+      { category: "gracz", title: "Wyższy Poziom Poszukiwań (+1)", pc: "FUGITIVE", phone: "1-999-3844-8483", ps: "R1, R1, ●, R2, ←, →, ←, →, ←, →", xbox: "RB, RB, B, RT, ←, →, ←, →, ←, →" },
+      { category: "gracz", title: "Niższy Poziom Poszukiwań (-1)", pc: "LAWYERUP", phone: "1-999-5299-3787", ps: "R1, R1, ●, R2, →, ←, →, ←, →, ←", xbox: "RB, RB, B, RT, →, ←, →, ←, →, ←" },
+      { category: "gracz", title: "Super Bieg (Szybszy sprint)", pc: "CATCHME", phone: "1-999-2288-463", ps: "▲, ←, →, →, L2, L1, ■", xbox: "Y, ←, →, →, LT, LB, X" },
+      { category: "gracz", title: "Szybkie Pływanie", pc: "GOTGILLS", phone: "1-999-4684-4557", ps: "←, ←, L1, →, →, R2, ←, L2, →", xbox: "←, ←, LB, →, →, RT, ←, LT, →" },
+      { category: "gracz", title: "Super Skok (Wysoki wyskok)", pc: "HOPTOIT", phone: "1-999-467-8648", ps: "←, ←, ▲, ▲, →, →, ←, →, ■, R1, R2", xbox: "←, ←, Y, Y, →, →, ←, →, X, RB, RT" },
+      { category: "gracz", title: "Spadek z Nieba (Skyfall)", pc: "SKYFALL", phone: "1-999-759-3255", ps: "L1, L2, R1, R2, ←, →, ←, →, L1, L2, R1, R2", xbox: "LB, LT, RB, RT, ←, →, ←, →, LB, LT, RB, RT" },
+      { category: "gracz", title: "Tryb Pijanego", pc: "LIQUOR", phone: "1-999-547-861", ps: "▲, →, →, ←, →, ■, ●, ←", xbox: "Y, →, →, ←, →, X, B, ←" },
+
+      { category: "swiat", title: "Grawitacja Księżycowa", pc: "FLOATER", phone: "1-999-356-2837", ps: "←, ←, L1, R1, L1, →, ←, L1, ←", xbox: "←, ←, LB, RB, LB, →, ←, LB, ←" },
+      { category: "swiat", title: "Śliskie Samochody (Drift Mode)", pc: "SNOWDAY", phone: "1-999-7669-329", ps: "▲, R1, R1, ←, R1, L1, R2, L1", xbox: "Y, RB, RB, ←, RB, LB, RT, LB" },
+      { category: "swiat", title: "Spowolnienie Czasu (Slow-Mo / do 3x)", pc: "SLOWMO", phone: "1-999-756-966", ps: "▲, ←, →, →, ■, R2, R1", xbox: "Y, ←, →, →, X, RT, RB" },
+      { category: "swiat", title: "Zmiana Pogody (Cykl dynamiczny)", pc: "MAKEITRAIN", phone: "1-999-6253-487246", ps: "R2, X, L1, L1, L2, L2, L2, ■", xbox: "RT, A, LB, LB, LT, LT, LT, X" },
+      { category: "swiat", title: "Tryb Reżyserski (Director Mode)", pc: "JRTALENT", phone: "1-999-5782-5368", ps: "Brak kodu numerycznego", xbox: "Odblokowanie w menu gry" },
+
+      { category: "bronie", title: "Wszystkie Bronie + Amunicja", pc: "TOOLUP", phone: "1-999-866-587", ps: "▲, R2, ←, L1, X, →, ▲, ↓, ■, L1, L1, L1", xbox: "Y, RT, ←, LB, A, →, Y, ↓, X, LB, LB, LB" },
+      { category: "bronie", title: "Wybuchowa Amunicja (Bang Bang)", pc: "HIGHEX", phone: "1-999-444-439", ps: "→, ■, X, ←, R1, R2, ←, →, →, L1, L1, L1", xbox: "→, X, A, ←, RB, RT, ←, →, →, LB, LB, LB" },
+      { category: "bronie", title: "Płonące Pociski", pc: "INCENDIARY", phone: "1-999-4623-634279", ps: "L1, R1, ■, R1, ←, R2, R1, ←, ■, →, L1, L1", xbox: "LB, RB, X, RB, ←, RT, RB, ←, X, →, LB, LB" },
+      { category: "bronie", title: "Wybuchowe Pięści (Super Ciosy)", pc: "HOTHANDS", phone: "1-999-468-42637", ps: "→, ←, X, ▲, R1, ●, ●, ●, L2", xbox: "→, ←, A, Y, RB, B, B, B, LT" },
+      { category: "bronie", title: "Spowolnienie Celowania (Dead Eye)", pc: "DEADEYE", phone: "1-999-3323-393", ps: "■, L2, R1, ▲, ←, ■, L2, →, X", xbox: "X, LT, RB, Y, ←, X, LT, →, A" },
+      { category: "bronie", title: "Darmowy Spadochron", pc: "SKYDIVE", phone: "1-999-759-3483", ps: "←, →, L1, L2, R1, R2, R2, ←, ←, →, L1", xbox: "←, →, LB, LT, RB, RT, RT, ←, ←, →, LB" },
+
+      { category: "pojazdy-lad", title: "Sportowy Samochód Comet", pc: "COMET", phone: "1-999-266-38", ps: "R1, ●, R2, →, L1, L2, X, X, ■, R1", xbox: "RB, B, RT, →, LB, LT, A, A, X, RB" },
+      { category: "pojazdy-lad", title: "Sportowy Samochód Rapid GT", pc: "RAPIDGT", phone: "1-999-727-4348", ps: "R2, L1, ●, →, L1, R1, →, ←, ●, R2", xbox: "RT, LB, B, →, LB, RB, →, ←, B, RT" },
+      { category: "pojazdy-lad", title: "Limuzyna Stretch", pc: "VINEWOOD", phone: "1-999-8463-9663", ps: "R2, →, L2, ←, ←, R1, L1, ●, →", xbox: "RT, →, LT, ←, ←, RB, LB, B, →" },
+      { category: "pojazdy-lad", title: "Śmieciarka Trashmaster", pc: "TRASHED", phone: "1-999-8727-433", ps: "●, R1, ●, R1, ←, ←, R1, L1, ●, →", xbox: "B, RB, B, RB, ←, ←, RB, LB, B, →" },
+      { category: "pojazdy-lad", title: "Wózek Golfowy Caddy", pc: "HOLEIN1", phone: "1-999-4653-461", ps: "●, L1, ←, R1, L2, X, R1, L1, ●, X", xbox: "B, LB, ←, RB, LT, A, RB, LB, B, A" },
+      { category: "pojazdy-lad", title: "Motocykl PCJ-600", pc: "ROCKET", phone: "1-999-762-538", ps: "R1, →, ←, →, R2, ←, →, ■, →, L2, L1, L1", xbox: "RB, →, ←, →, RT, ←, →, X, →, LT, LB, LB" },
+      { category: "pojazdy-lad", title: "Motocykl Cross Sanchez", pc: "OFFROAD", phone: "1-999-633-7623", ps: "●, X, L1, ●, ●, L1, ●, R1, R2, L2, L1, L1", xbox: "B, A, LB, B, B, LB, B, RB, RT, LT, LB, LB" },
+      { category: "pojazdy-lad", title: "Rower BMX", pc: "BANDIT", phone: "1-999-226-348", ps: "←, ←, →, →, ←, →, ■, ●, ▲, R1, R2", xbox: "←, ←, →, →, ←, →, X, B, Y, RB, RT" },
+
+      { category: "pojazdy-lot", title: "Helikopter Bojowy Buzzard", pc: "BUZZOFF", phone: "1-999-2899-633", ps: "●, ●, L1, ●, ●, ●, L1, L2, R1, ▲, ●, ▲", xbox: "B, B, LB, B, B, B, LB, LT, RB, Y, B, Y" },
+      { category: "pojazdy-lot", title: "Samolot Akrobacyjny Mallard", pc: "BARNSTORM", phone: "1-999-2276-78676", ps: "●, →, L1, L2, ←, R1, L1, L1, ←, ←, X, ▲", xbox: "B, →, LB, LT, ←, RB, LB, LB, ←, ←, A, Y" },
+      { category: "pojazdy-lot", title: "Samolot Rolniczy Duster", pc: "FLYSPRAY", phone: "1-999-3597-7729", ps: "→, ←, R1, R1, R1, ←, ▲, ▲, X, ●, L1, L1", xbox: "→, ←, RB, RB, RB, ←, Y, Y, A, B, LB, LB" },
+
+      { category: "pojazdy-spec", title: "Opancerzony Duke O'Death", pc: "DEATHCAR", phone: "1-999-3328-4227", ps: "Wymaga ukończenia zdarzenia", xbox: "Wymaga ukończenia zdarzenia" },
+      { category: "pojazdy-spec", title: "Wodnosamolot Dodo", pc: "EXTINCT", phone: "1-999-398-4628", ps: "Wymaga ukończenia misji", xbox: "Wymaga ukończenia misji" },
+      { category: "pojazdy-spec", title: "Łódź Podwodna Kraken Sub", pc: "BUBBLES", phone: "1-999-282-2537", ps: "Wymaga wyzwania fotograficznego", xbox: "Wymaga wyzwania fotograficznego" },
+      { category: "pojazdy-spec", title: "Służby Ratunkowe (Policja / Pogotowie)", pc: "Brak", phone: "911", ps: "Szybki numer w grze", xbox: "Szybki numer w grze" }
+    ];
+
+    const categoryNames = {
+      "gracz": "01. Gracz i Statystyki Podstawowe",
+      "swiat": "02. Świat i Otoczenie Gry",
+      "bronie": "03. Walka, Bronie i Ekwipunek",
+      "pojazdy-lad": "04. Pojazdy Lądowe (Auta i Motory)",
+      "pojazdy-lot": "05. Pojazdy Latające",
+      "pojazdy-spec": "06. Pojazdy Specjalne i Inne"
+    };
+
+    function renderCheats() {
+      const searchVal = document.getElementById("searchInput").value.toLowerCase().trim();
+      const catVal = document.getElementById("categoryFilter").value;
+      const platformVal = document.getElementById("platformFilter").value;
+
+      const desktopTbody = document.getElementById("desktopTableBody");
+      const mobileContainer = document.getElementById("mobileCardsContainer");
+      
+      desktopTbody.innerHTML = "";
+      mobileContainer.innerHTML = "";
+
+      let lastCategory = "";
+      let visibleCount = 0;
+
+      cheatsData.forEach((cheat) => {
+        // Sprawdzanie filtrów kategorii i tekstu
+        const matchesCategory = (catVal === "all" || cheat.category === catVal);
+        const fullText = `${cheat.title} ${cheat.pc} ${cheat.phone} ${cheat.ps} ${cheat.xbox}`.toLowerCase();
+        const matchesSearch = fullText.includes(searchVal);
+
+        // Sprawdzanie filtra platformy
+        let matchesPlatform = true;
+        if (platformVal === "pc") matchesPlatform = (cheat.pc && cheat.pc !== "Brak");
+        if (platformVal === "telefon") matchesPlatform = (cheat.phone && cheat.phone !== "Brak");
+        if (platformVal === "ps") matchesPlatform = (cheat.ps && !cheat.ps.includes("Wymaga") && cheat.ps !== "Brak kodu numerycznego");
+        if (platformVal === "xbox") matchesPlatform = (cheat.xbox && !cheat.xbox.includes("Wymaga") && cheat.xbox !== "Odblokowanie w menu gry");
+
+        if (matchesCategory && matchesSearch && matchesPlatform) {
+          visibleCount++;
+
+          if (cheat.category !== lastCategory) {
+            lastCategory = cheat.category;
+            const catTitle = categoryNames[cheat.category] || cheat.category;
+
+            const dTr = document.createElement("tr");
+            dTr.className = "cheat-row category-row";
+            dTr.innerHTML = `<td colspan="5"># ${catTitle}</td>`;
+            desktopTbody.appendChild(dTr);
+
+            const mDiv = document.createElement("div");
+            mDiv.className = "mobile-category-header";
+            mDiv.innerText = `# ${catTitle}`;
+            mobileContainer.appendChild(mDiv);
+          }
+
+          const dRow = document.createElement("tr");
+          dRow.className = "cheat-row";
+          dRow.innerHTML = `
+            <td><strong>${cheat.title}</strong></td>
+            <td><code class="code-pc">${cheat.pc}</code></td>
+            <td><code class="code-phone">${cheat.phone}</code></td>
+            <td class="pad-combo">${cheat.ps}</td>
+            <td class="pad-combo">${cheat.xbox}</td>
+          `;
+          desktopTbody.appendChild(dRow);
+
+          const mCard = document.createElement("div");
+          mCard.className = "mobile-card";
+          mCard.innerHTML = `
+            <div class="mobile-card-title">${cheat.title}</div>
+            <div class="mobile-grid">
+              <div>
+                <div class="mobile-field-label">PC Konsola (~)</div>
+                <code class="code-pc">${cheat.pc}</code>
+              </div>
+              <div>
+                <div class="mobile-field-label">W telefonie</div>
+                <code class="code-phone">${cheat.phone}</code>
+              </div>
+              <div class="mobile-full-width">
+                <div class="mobile-field-label">PlayStation</div>
+                <div class="pad-combo">${cheat.ps}</div>
+              </div>
+              <div class="mobile-full-width">
+                <div class="mobile-field-label">Xbox</div>
+                <div class="pad-combo">${cheat.xbox}</div>
+              </div>
             </div>
-            <nav class="pv-list">
-                <p class="nav-title">Kanały</p>
-                <div class="pv-item active" id="btn-Ogólny" onclick="switchChat('Ogólny')">🌐 Czat Ogólny</div>
-                <p class="nav-title">Prywatne (PV)</p>
-                <div class="pv-item" id="btn-Marek" onclick="switchChat('Marek')">👤 Marek</div>
-                <div class="pv-item" id="btn-Ania" onclick="switchChat('Ania')">👤 Ania</div>
-                <div class="pv-item" id="btn-Kamil" onclick="switchChat('Kamil')">👤 Kamil</div>
-            </nav>
-            <button onclick="location.reload()" class="logout-btn">Wyloguj</button>
-        </aside>
+          `;
+          mobileContainer.appendChild(mCard);
+        }
+      });
 
-        <main id="chat-area">
-            <header class="chat-header">
-                <h3 id="current-chat-title">Ogólny</h3>
-                <button class="mode-btn" onclick="toggleDarkMode()">🌙</button>
-            </header>
-            
-            <div id="chat-main"></div>
+      document.getElementById("cheatCount").innerText = `${visibleCount} pasujących kodów`;
+    }
 
-            <footer class="chat-footer">
-                <label class="file-btn">
-                    📎 <input type="file" id="msg-img" hidden accept="image/*" onchange="sendImage(this)">
-                </label>
-                <input type="text" id="msg-input" placeholder="Napisz wiadomość...">
-                <button onclick="sendMsg()" class="send-btn">➤</button>
-            </footer>
-        </main>
-    </div>
+    function filterCheats() {
+      renderCheats();
+    }
 
-    <script src="script.js"></script>
+    function exportPNG() {
+      const element = document.getElementById("exportArea");
+      const btn = event.target;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "⏳ Renderowanie...";
+
+      html2canvas(element, {
+        backgroundColor: '#0d1117',
+        scale: 2,
+        logging: false
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'gta5-kody-platformy.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        btn.innerHTML = originalText;
+      }).catch(err => {
+        console.error(err);
+        alert('Błąd podczas generowania obrazu.');
+        btn.innerHTML = originalText;
+      });
+    }
+
+    window.onload = () => renderCheats();
+  </script>
 </body>
-</html>
+</
